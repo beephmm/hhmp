@@ -1,25 +1,44 @@
 from collections import deque
 from math import gcd
 
-def water_jug_bfs(c1, c2, target):
-    if target > max(c1, c2) or target % gcd(c1, c2):
+def water_jug_bfs(cap1, cap2, target):
+    if target > max(cap1, cap2) or target % gcd(cap1, cap2) != 0:
         return None
-    queue, seen = deque([[(0, 0)]]), {(0, 0)}
-    while queue:
-        path = queue.popleft()
-        a, b = path[-1]
-        if target in (a, b):
-            return path
-        p1, p2 = min(a, c2 - b), min(b, c1 - a)
-        for s in [(c1, b), (a, c2), (0, b), (a, 0), (a - p1, b + p1), (a + p2, b - p2)]:
-            if s not in seen:
-                seen.add(s)
-                queue.append(path + [s])
 
-sol = water_jug_bfs(4, 3, 2)
-if sol:
-    print(f"Solution found in {len(sol) - 1} steps:\n")
-    for i, (a, b) in enumerate(sol):
-        print(f"Step {i}: Jug1 = {a}L, Jug2 = {b}L")
-else:
-    print("No solution exists for these jug capacities and target.")
+    start = (0, 0)
+    visited = {start}
+    queue = deque([(start, [start])])
+
+    while queue:
+        (j1, j2), path = queue.popleft()
+
+        if j1 == target or j2 == target:
+            return path
+
+        possible_states = [
+            (cap1, j2),
+            (j1, cap2),
+            (0, j2),
+            (j1, 0),
+            (j1 - min(j1, cap2 - j2), j2 + min(j1, cap2 - j2)),
+            (j1 + min(j2, cap1 - j1), j2 - min(j2, cap1 - j1)),
+        ]
+
+        for state in possible_states:
+            if state not in visited:
+                visited.add(state)
+                queue.append((state, path + [state]))
+
+    return None
+
+if __name__ == "__main__":
+    cap1, cap2, target = 4, 3, 2
+
+    solution = water_jug_bfs(cap1, cap2, target)
+
+    if solution:
+        print(f"Solution found in {len(solution) - 1} steps:\n")
+        for i, state in enumerate(solution):
+            print(f"Step {i}: Jug1 = {state[0]}L, Jug2 = {state[1]}L")
+    else:
+        print("No solution exists for these jug capacities and target.")
