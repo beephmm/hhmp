@@ -1,20 +1,27 @@
-def weather_expert_system(t, h, w):
-    if w >= 50:
+def weather_expert_system(temperature, humidity, wind_speed):
+    if wind_speed >= 50:
         return "Stormy Weather"
-    if h >= 80 and 20 <= t <= 35:
+    elif humidity >= 80 and 20 <= temperature <= 35:
         return "Rainy Weather"
-    if t >= 35:
+    elif temperature >= 35:
         return "Hot Weather"
-    if t < 20:
+    elif temperature < 20:
         return "Cold Weather"
-    if 25 <= t < 35 and h < 60:
+    elif 25 <= temperature < 35 and humidity < 60:
         return "Pleasant Weather"
-    if 20 <= t < 35 and 60 <= h < 80:
+    elif 20 <= temperature < 35 and 60 <= humidity < 80:
         return "Cloudy Weather"
-    return "Moderate Weather"
+    else:
+        return "Moderate Weather"
 
-print("=" * 35 + "\n       WEATHER EXPERT SYSTEM\n" + "=" * 35)
-t = float(input("Enter temperature (°C): "))
-h = float(input("Enter humidity (%): "))
-w = float(input("Enter wind speed (km/h): "))
-print("\nWeather Classification:", weather_expert_system(t, h, w))
+print("===================================")
+print("        WEATHER EXPERT SYSTEM")
+print("===================================")
+
+temperature = float(input("Enter temperature (°C): "))
+humidity = float(input("Enter humidity (%): "))
+wind_speed = float(input("Enter wind speed (km/h): "))
+
+result = weather_expert_system(temperature, humidity, wind_speed)
+
+print("\nWeather Classification:", result)
