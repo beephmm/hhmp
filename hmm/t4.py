@@ -1,13 +1,18 @@
 import heapq
 
 def astar(graph, start, goal, h):
-    pq = [(h[start], 0, [start])]  
-    while pq:
-        f, g, path = heapq.heappop(pq)
-        if path[-1] == goal:
+    open_set = [(h[start], start, [start], 0)]
+
+    while open_set:
+        f, node, path, g = heapq.heappop(open_set)
+
+        if node == goal:
             return path, g
-        for nxt, cost in graph[path[-1]]:
-            heapq.heappush(pq, (g + cost + h[nxt], g + cost, path + [nxt]))
+
+        for neighbor, cost in graph[node]:
+            new_g = g + cost
+            heapq.heappush(open_set, (new_g + h[neighbor], neighbor, path + [neighbor], new_g))
+
     return None, float('inf')
 
 graph = {
@@ -20,6 +25,8 @@ graph = {
     'G': []
 }
 
-path, cost = astar(graph, 'A', 'G', dict.fromkeys(graph, 0))
+h = {'A': 0, 'B': 0, 'C': 0, 'D': 0, 'E': 0, 'F': 0, 'G': 0}
+
+path, cost = astar(graph, 'A', 'G', h)
 print("Path:", path)
 print("Cost:", cost)
