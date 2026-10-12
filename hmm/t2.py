@@ -1,21 +1,51 @@
-graph = {'A': 'BC', 'B': 'ADE', 'C': 'AFG', 'D': 'B', 'E': 'B', 'F': 'C', 'G': 'C'}
+graph = {
+    'A': ['B', 'C'],
+    'B': ['A', 'D', 'E'],
+    'C': ['A', 'F', 'G'],
+    'D': ['B'],
+    'E': ['B'],
+    'F': ['C'],
+    'G': ['C']
+}
 
-def dfs_recursive(node, visited=None):
-    visited = visited if visited is not None else []
-    visited.append(node)
-    for n in graph[node]:
-        if n not in visited:
-            dfs_recursive(n, visited)
-    return visited
+def dfs_iterative(graph, start):
+    visited = set()
+    stack = [start]
+    order = []
 
-def dfs_iterative(start):
-    visited, stack = [], [start]
     while stack:
         node = stack.pop()
         if node not in visited:
-            visited.append(node)
-            stack.extend(reversed(graph[node]))
+            visited.add(node)
+            order.append(node)
+            for neighbor in reversed(graph[node]):
+                if neighbor not in visited:
+                    stack.append(neighbor)
+
+    return order
+
+print("\n\nIterative DFS from A:")
+print(dfs_iterative(graph, 'A'))
+
+'''graph = {
+    'A': ['B', 'C'],
+    'B': ['A', 'D', 'E'],
+    'C': ['A', 'F', 'G'],
+    'D': ['B'],
+    'E': ['B'],
+    'F': ['C'],
+    'G': ['C']
+}
+
+def dfs_recursive(graph, node, visited=None):
+    if visited is None:
+        visited = set()
+    visited.add(node)
+    print(node, end=' ')
+    for neighbor in graph[node]:
+        if neighbor not in visited:
+            dfs_recursive(graph, neighbor, visited)
     return visited
 
-print("Recursive DFS from A:", *dfs_recursive('A'))
-print("Iterative DFS from A:", *dfs_iterative('A'))
+print("Recursive DFS from A:")
+dfs_recursive(graph, 'A')'''
